@@ -62,7 +62,7 @@
         /**
          * State config
          */
-        .config(['$stateProvider', $stateProvider => {
+        .config(['$stateProvider', '$locationProvider', ($stateProvider, $locationProvider) => {
             const view = './view/';
             $stateProvider
                 .state('app', {
@@ -86,6 +86,7 @@
                     templateUrl: view + 'watchlist.html',
                     controller: 'WatchlistController as watchlistCtrl'
                 });
+            $locationProvider.html5Mode(true);
         }])
         .config(['$mdThemingProvider', $mdThemingProvider => {
             $mdThemingProvider.setNonce();
