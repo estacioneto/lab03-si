@@ -1,0 +1,13 @@
+<md-content>
+    <md-content layout-padding id="main-page" flex>
+        <!-- Content -->
+        <div class="content" data-layout="column" data-flex>
+            <search on-search="homeCtrl.searchSeries"></search>
+            <series-listing
+                    series-list="homeCtrl.searchedSeries"
+                    show-details="homeCtrl.showDetails">
+            </series-listing>
+        </div>
+        <!-- end Content -->
+    </md-content>
+</md-content>
