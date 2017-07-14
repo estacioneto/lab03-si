@@ -12,4 +12,6 @@ public interface SecurityManager {
     String generateToken(User user);
 
     User getUserFromToken(String token);
+
+    String getTokenByHeaderAuthorization(String authorization);
 }

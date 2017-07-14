@@ -9,4 +9,6 @@ public interface UsersManager {
     User getLoggedUser(String userToken);
 
     User registerUser(User user);
+
+    String login(User user);
 }

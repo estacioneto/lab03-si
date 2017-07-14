@@ -1,6 +1,7 @@
 package br.edu.ufcg.lebflix.managers;
 
 import br.edu.ufcg.lebflix.entities.User;
+import br.edu.ufcg.lebflix.exception.AccessDeniedException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -15,6 +16,10 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Arrays;
+import java.util.Optional;
+
+import static br.edu.ufcg.lebflix.exception.AccessDeniedMessage.MISSING_AUTHORIZATION;
 
 /**
  * Security Manager. Handles security issues with JSON Web Tokens.
@@ -53,7 +58,6 @@ public class SecurityManagerBean implements SecurityManager {
 
     private DecodedJWT getDecodedJWT(String token) {
         JWTVerifier verifier = JWT.require(this.algorithm)
-                .withIssuer("auth0")
                 .build();
         return verifier.verify(token);
     }
@@ -73,6 +77,19 @@ public class SecurityManagerBean implements SecurityManager {
         String email = jwt.getClaim(EMAIL_CLAIM).asString();
 
         return new User(id, email);
+    }
+
+    @Override
+    public String getTokenByHeaderAuthorization(String authorization) {
+        if (authorization != null) {
+            Optional<String> optionalToken = Arrays.stream(authorization.split(" "))
+                    .reduce((first, second) -> second);
+            if (!optionalToken.isPresent()) {
+                throw new AccessDeniedException(MISSING_AUTHORIZATION);
+            }
+            return optionalToken.get();
+        }
+        throw new AccessDeniedException(MISSING_AUTHORIZATION);
     }
 
 }

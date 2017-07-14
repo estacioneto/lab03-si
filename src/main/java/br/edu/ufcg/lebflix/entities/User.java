@@ -1,5 +1,8 @@
 package br.edu.ufcg.lebflix.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -9,6 +12,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "TB_USER")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements Serializable {
 
     private static final long serialVersionUID = -9207339110231485498L;
@@ -41,6 +45,11 @@ public class User implements Serializable {
     public User(Long id, String email) {
         this.id = id;
         this.email = email;
+    }
+
+    public User(Long id, String email, String name) {
+        this(id, email);
+        this.name = name;
     }
 
     public Long getId() {
