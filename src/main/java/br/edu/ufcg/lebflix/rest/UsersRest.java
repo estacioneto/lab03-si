@@ -30,8 +30,7 @@ public class UsersRest {
 
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     public User getUser(@RequestHeader String Authorization) {
-        String token = securityManager.getTokenByHeaderAuthorization(Authorization);
-        return usersManager.getLoggedUser(token);
+        return usersManager.getLoggedUser(Authorization);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)

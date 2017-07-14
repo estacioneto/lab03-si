@@ -7,11 +7,9 @@ import br.edu.ufcg.lebflix.entities.User;
  */
 public interface SecurityManager {
 
-    boolean verifyToken(String token);
-
     String generateToken(User user);
 
     User getUserFromToken(String token);
 
-    String getTokenByHeaderAuthorization(String authorization);
+    User getUserFromAuthorizationHeader(String authorization);
 }

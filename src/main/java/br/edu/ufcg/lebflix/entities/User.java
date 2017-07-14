@@ -36,6 +36,10 @@ public class User implements Serializable {
     public User() {
     }
 
+    public User(Long id) {
+        this.id = id;
+    }
+
     /**
      * JWT Constructor. Uses the only needed information given from a token.
      *
@@ -43,7 +47,7 @@ public class User implements Serializable {
      * @param email User's email.
      */
     public User(Long id, String email) {
-        this.id = id;
+        this(id);
         this.email = email;
     }
 

@@ -2,11 +2,13 @@ package br.edu.ufcg.lebflix.managers;
 
 import br.edu.ufcg.lebflix.entities.User;
 import br.edu.ufcg.lebflix.exception.AccessDeniedException;
+import br.edu.ufcg.lebflix.exception.InvalidJWTException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.google.common.collect.Iterables;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,7 +19,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
-import java.util.Optional;
 
 import static br.edu.ufcg.lebflix.exception.AccessDeniedMessage.MISSING_AUTHORIZATION;
 
@@ -46,27 +47,20 @@ public class SecurityManagerBean implements SecurityManager {
         this.algorithm = Algorithm.RSA256(publicKey, privateKey);
     }
 
-    @Override
-    public boolean verifyToken(String token) {
-        try {
-            getDecodedJWT(token);
-            return true;
-        } catch (JWTVerificationException exception) {
-            return false;
-        }
-    }
-
     private DecodedJWT getDecodedJWT(String token) {
-        JWTVerifier verifier = JWT.require(this.algorithm)
-                .build();
-        return verifier.verify(token);
+        try {
+            JWTVerifier verifier = JWT.require(this.algorithm)
+                    .build();
+            return verifier.verify(token);
+        } catch (JWTVerificationException exception) {
+            throw new InvalidJWTException(exception.getMessage());
+        }
     }
 
     @Override
     public String generateToken(User user) {
         return JWT.create()
                 .withClaim(ID_CLAIM, user.getId())
-                .withClaim(EMAIL_CLAIM, user.getEmail())
                 .sign(this.algorithm);
     }
 
@@ -74,20 +68,23 @@ public class SecurityManagerBean implements SecurityManager {
     public User getUserFromToken(String token) {
         DecodedJWT jwt = getDecodedJWT(token);
         Long id = jwt.getClaim(ID_CLAIM).asLong();
-        String email = jwt.getClaim(EMAIL_CLAIM).asString();
 
-        return new User(id, email);
+        return new User(id);
     }
 
     @Override
-    public String getTokenByHeaderAuthorization(String authorization) {
+    public User getUserFromAuthorizationHeader(String authorization) {
+        String token = getTokenByHeaderAuthorization(authorization);
+        return getUserFromToken(token);
+    }
+
+    private String getTokenByHeaderAuthorization(String authorization) {
         if (authorization != null) {
-            Optional<String> optionalToken = Arrays.stream(authorization.split(" "))
-                    .reduce((first, second) -> second);
-            if (!optionalToken.isPresent()) {
+            String token = Iterables.getLast(Arrays.asList(authorization.split(" ")));
+            if (token == null) {
                 throw new AccessDeniedException(MISSING_AUTHORIZATION);
             }
-            return optionalToken.get();
+            return token;
         }
         throw new AccessDeniedException(MISSING_AUTHORIZATION);
     }

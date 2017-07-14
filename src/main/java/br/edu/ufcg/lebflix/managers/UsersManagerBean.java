@@ -26,8 +26,8 @@ public class UsersManagerBean implements UsersManager {
     private UsersDAO usersDAO;
 
     @Override
-    public User getLoggedUser(String userToken) {
-        User jwtUser = securityManager.getUserFromToken(userToken);
+    public User getLoggedUser(String authorizationHeader) {
+        User jwtUser = securityManager.getUserFromAuthorizationHeader(authorizationHeader);
         return usersDAO.getUserById(jwtUser.getId());
     }
 
