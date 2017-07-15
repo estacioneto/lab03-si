@@ -1,5 +1,7 @@
 package br.edu.ufcg.lebflix.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -9,6 +11,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "TB_SERIES")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Series implements Serializable {
 
     private static final long serialVersionUID = 4302522548712194679L;
@@ -18,8 +21,8 @@ public class Series implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "ID_IMDB", updatable = false)
-    private String idImdb;
+    @Column(name = "IMDB_ID", updatable = false, unique = true)
+    private String imdbID;
 
     @Column(name = "RATE")
     private Double rate;
@@ -35,6 +38,10 @@ public class Series implements Serializable {
     private Boolean onProfile;
 
     @NotNull
+    @Column(name = "ON_WATCHLIST")
+    private Boolean onWatchlist;
+
+    @NotNull
     @Column(name = "ID_USER")
     private Long idUser;
 
@@ -48,12 +55,12 @@ public class Series implements Serializable {
         this.id = id;
     }
 
-    public String getIdImdb() {
-        return idImdb;
+    public String getImdbID() {
+        return imdbID;
     }
 
-    public void setIdImdb(String idImdb) {
-        this.idImdb = idImdb;
+    public void setImdbID(String imdbID) {
+        this.imdbID = imdbID;
     }
 
     public Double getRate() {
@@ -86,6 +93,14 @@ public class Series implements Serializable {
 
     public void setOnProfile(Boolean onProfile) {
         this.onProfile = onProfile;
+    }
+
+    public Boolean getOnWatchlist() {
+        return onWatchlist;
+    }
+
+    public void setOnWatchlist(Boolean onWatchlist) {
+        this.onWatchlist = onWatchlist;
     }
 
     public Long getIdUser() {

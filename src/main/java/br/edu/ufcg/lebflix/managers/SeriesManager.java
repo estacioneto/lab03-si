@@ -11,5 +11,14 @@ import java.util.List;
  * @author Estácio Pereira
  */
 public interface SeriesManager {
+
     List<Series> getProfileSeries(User user);
+
+    List<Series> getWatchlistSeries(User user);
+
+    Series addSeries(User user, Series series);
+
+    Series deleteSeries(User user, Long idSeries);
+
+    Series updateSeries(User user, Long idSeries, Series series);
 }

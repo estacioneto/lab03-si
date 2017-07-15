@@ -39,7 +39,7 @@ public class UsersManagerBean implements UsersManager {
                     UnsupportedOperationMessage.EXISITING_USER.getMessage());
         }
         usersDAO.persistUser(user);
-        return user;
+        return new User(user.getId(), user.getEmail(), user.getName());
     }
 
     @Override
