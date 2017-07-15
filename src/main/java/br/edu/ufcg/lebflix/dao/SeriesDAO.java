@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Series database handler.
@@ -17,24 +19,17 @@ import java.util.List;
 public class SeriesDAO {
 
     private static final String QUERY_PROFILE_SERIES = new StringBuilder()
-            .append("SELECT Series s ")
-            .append("FROM Series s")
-            .append("WHERE s.idUser=:idUser")
-            .append("AND s.onProfile=TRUE")
+            .append("SELECT s ")
+            .append("FROM Series s ")
+            .append("WHERE s.idUser=:idUser ")
+            .append("AND s.onProfile IS TRUE ")
             .toString();
 
     private static final String QUERY_WATCHLIST_SERIES = new StringBuilder()
-            .append("SELECT Series s ")
-            .append("FROM Series s")
-            .append("WHERE s.idUser=:idUser")
-            .append("AND s.onWatchlist=TRUE")
-            .toString();
-
-    private static final String OWNS_THE_SERIES = new StringBuilder()
-            .append("SELECT Series s ")
-            .append("FROM Series s")
-            .append("WHERE s.idUser=:idUser")
-            .append("AND s.id=:id")
+            .append("SELECT s ")
+            .append("FROM Series s ")
+            .append("WHERE s.idUser=:idUser ")
+            .append("AND s.onWatchlist IS TRUE ")
             .toString();
 
     private static final Long EXISTS = 1L;
@@ -59,10 +54,9 @@ public class SeriesDAO {
     }
 
     public boolean isSeriesOwner(Long idUser, Long idSeries) {
-        TypedQuery<Long> query = entityManager.createQuery(OWNS_THE_SERIES, Long.class);
-        query.setParameter("idUser", idUser);
-        query.setParameter("id", idSeries);
-        return EXISTS.equals(query.getSingleResult());
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("idUser", idUser);
+        return entityManager.find(Series.class, idSeries, parameters) != null;
     }
 
     public Series getSeries(Long idSeries) {
