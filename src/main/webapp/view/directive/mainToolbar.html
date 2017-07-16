@@ -5,7 +5,7 @@
             <md-button aria-label="App title"
                        ui-sref="app.home"
                        layout-align="center center">
-                <img src="../../img/rsz_lebflix_completo.png" height="45">
+                <img src="../../img/rsz_lebflix_completo.png" height="35">
             </md-button>
         </md-input-container>
 
@@ -19,7 +19,9 @@
                 </md-button>
                 <md-button hide-gt-xs aria-label="State {{state}} Icon"
                            data-ui-sref="{{state.name}}" class="md-icon-button" layout-align="center center">
-                    <md-icon md-font-icon="{{state.icon}}" class="md-48"></md-icon>
+                    <md-icon class="md-48">
+                        {{state.icon}}
+                    </md-icon>
                 </md-button>
             </div>
         </md-input-container>

@@ -6,24 +6,12 @@
      *
      * @author Estácio Pereira
      */
-    angular.module('toolbarModule', []).directive('mainToolbar', ['$state', function ($state) {
+    angular.module('toolbarModule', []).directive('mainToolbar', ['$state', 'APP_STATES', function ($state, APP_STATES) {
         return {
             restrict: 'AE',
             templateUrl: './view/directive/mainToolbar.html',
             scope: {},
             link: function ($scope, element, attrs) {
-
-                const PROFILE_STATE = {
-                    name: 'app.profile',
-                    icon: 'fa fa-user'
-                }, WATCHLIST_STATE = {
-                    name: 'app.watchlist',
-                    icon: 'fa fa-television'
-                }, HOME_STATE = {
-                    name: 'app.home',
-                    icon: 'fa fa-home'
-                };
-
 
                 /**
                  * The object containing the available states given the current as key.
@@ -31,9 +19,10 @@
                  * @type {{[state]: [{[name]: [string], [icon]: [string]}]}}
                  */
                 $scope.availableStates = {
-                    'app.home': [PROFILE_STATE, WATCHLIST_STATE],
-                    'app.profile': [HOME_STATE, WATCHLIST_STATE],
-                    'app.watchlist': [HOME_STATE, PROFILE_STATE]
+                    'app.home': [APP_STATES.PROFILE, APP_STATES.WATCHLIST],
+                    'app.profile': [APP_STATES.HOME, APP_STATES.WATCHLIST],
+                    'app.watchlist': [APP_STATES.HOME, APP_STATES.PROFILE],
+                    'app.signup': [APP_STATES.HOME]
                 };
 
                 /**

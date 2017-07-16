@@ -42,7 +42,11 @@ public class WebConfigurator extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/vendor/**")
                 .addResourceLocations("/vendor/")
                 .setCachePeriod(cache);
-        
+
+        registry.addResourceHandler("/fonts/**")
+                .addResourceLocations("/fonts/")
+                .setCachePeriod(cache);
+
         registry.addResourceHandler("/**")
                 .addResourceLocations("/index.html")
                 .setCachePeriod(cache)

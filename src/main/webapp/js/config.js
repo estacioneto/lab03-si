@@ -16,7 +16,8 @@
             'homeModule',
             'searchModule',
             'seriesModule',
-            'userModule'
+            'userModule',
+            'authModule'
         ]);
     app.constant('_', window._)
     /**
@@ -76,6 +77,11 @@
                     templateUrl: view + 'home.html',
                     controller: 'HomeController as homeCtrl'
                 })
+                .state('app.signup', {
+                    url: '/signup',
+                    templateUrl: view + 'sign-up.html',
+                    controller: 'SignUpController as signUpCtrl'
+                })
                 .state('app.profile', {
                     url: '/profile',
                     templateUrl: view + 'profile.html',
@@ -91,8 +97,9 @@
         .config(['$mdThemingProvider', $mdThemingProvider => {
             $mdThemingProvider.setNonce();
             $mdThemingProvider.theme('default')
-                .primaryPalette('grey', {default: '900'})
-                .accentPalette('red', {default: '600'});
+                .primaryPalette('grey', {default: 'A200'})
+                .accentPalette('red', {default: '600'})
+                .warnPalette('red', {default: '600'});
         }]);
     app.run(['$rootScope', 'ModalService', ($rootScope, ModalService) => {
         $rootScope._ = window._;
