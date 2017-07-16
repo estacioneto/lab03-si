@@ -14,7 +14,7 @@
         /**
          * Shows an action toast and return the toast promise.
          *
-         * @param   {Object}  options Object containing all the custom options.
+         * @param   {Object | String}  options Object containing all the custom options.
          * @returns {Promise} Toast's promise
          */
         this.showActionToast = function (options) {

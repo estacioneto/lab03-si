@@ -1,11 +1,17 @@
 (() => {
     'use strict';
 
-    angular.module('authModule').controller('SignUpController', [function () {
+    angular.module('authModule').controller('SignUpController', ['$state', 'AuthService', 'ModalService', 'ToastService', 'APP_STATES', function ($state, AuthService, ModalService, ToastService, APP_STATES) {
         this.user = {};
 
         this.submit = function () {
-            console.log(this.user);
+            return AuthService.signUp(this.user)
+                .catch(err => ModalService.notifyError(`Could not register. ${(err.data.message || '')}`, err))
+                .then(info => {
+                    ToastService.showActionToast('User correctly registered!');
+                    $state.go(APP_STATES.HOME.name);
+                    return info;
+                });
         };
     }]);
 })();

@@ -1,13 +1,5 @@
-<md-content>
-    <md-content >
-        <!-- Content -->
-        <div class="content" data-layout="column" flex>
-            <search on-search="homeCtrl.searchSeries"></search>
-            <series-listing
-                    series-list="homeCtrl.searchedSeries"
-                    show-details="homeCtrl.showDetails">
-            </series-listing>
-        </div>
-        <!-- end Content -->
-    </md-content>
-</md-content>
+<search on-search="homeCtrl.searchSeries"></search>
+<series-listing
+        series-list="homeCtrl.searchedSeries"
+        show-details="homeCtrl.showDetails">
+</series-listing>
