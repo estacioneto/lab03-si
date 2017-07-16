@@ -8,7 +8,7 @@
             return AuthService.signUp(this.user)
                 .catch(err => ModalService.notifyError(`Could not register. ${(err.data.message || '')}`, err))
                 .then(info => {
-                    ToastService.showActionToast('User correctly registered!');
+                    ToastService.showActionToast('You are correctly registered and can login now!');
                     $state.go(APP_STATES.HOME.name);
                     return info;
                 });

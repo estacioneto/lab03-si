@@ -6,7 +6,7 @@
      *
      * @author Estácio Pereira.
      */
-    angular.module('userModule').controller('ProfileController', ['UserService', function (UserService) {
+    angular.module('userModule').controller('ProfileController', ['SeriesService', 'ModalService', function (SeriesService, ModalService) {
         const self = this;
 
         /**
@@ -15,7 +15,16 @@
          */
         this.showDetails = true;
 
-        this.profile = UserService.profile;
+        this.profile = {};
 
+        (() => SeriesService.loadProfileSeriesList()
+            .catch(err => ModalService.notifyError(`Loading profile series failed. ${(err.data.message || '')}`,err))
+            .then(info => {
+                this.profile.series = info.data;
+                console.log('profile');
+                console.log(info.data);
+                return info;
+            })
+        )();
     }]);
 })();

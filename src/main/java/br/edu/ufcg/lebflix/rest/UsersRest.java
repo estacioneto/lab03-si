@@ -1,7 +1,6 @@
 package br.edu.ufcg.lebflix.rest;
 
 import br.edu.ufcg.lebflix.entities.User;
-import br.edu.ufcg.lebflix.managers.SecurityManager;
 import br.edu.ufcg.lebflix.managers.UsersManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,9 +19,6 @@ public class UsersRest {
     @Autowired
     private UsersManager usersManager;
 
-    @Autowired
-    private SecurityManager securityManager;
-
     @RequestMapping(value = {"/", ""}, method = RequestMethod.POST)
     public User registerUser(@RequestBody User user) {
         return usersManager.registerUser(user);
@@ -35,6 +31,6 @@ public class UsersRest {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(@RequestBody User user) {
-        return usersManager.login(user);
+        return "{\"token\" : \"" + usersManager.login(user) + "\"}";
     }
 }

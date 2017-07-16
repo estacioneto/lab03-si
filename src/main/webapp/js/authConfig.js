@@ -34,10 +34,15 @@
         }])
         .run(['$rootScope', 'store', '$state', 'APP_STATES', function ($rootScope, store, $state, APP_STATES) {
             $rootScope.$on('$stateChangeStart', function (event, toState) {
-                // if (!store.get('token') && (toState.name !== APP_STATES.HOME.name)) {
-                //     event.preventDefault();
-                //     $state.go(APP_STATES.HOME.name);
-                // }
+                const availableStates = [
+                    APP_STATES.INIT.name,
+                    APP_STATES.SIGNUP.name,
+                    APP_STATES.LOGIN.name
+                ];
+                if (!store.get('token') && (!_.includes(availableStates, toState.name))) {
+                    event.preventDefault();
+                    $state.go(APP_STATES.INIT.name);
+                }
             });
         }]);
 }());

@@ -11,7 +11,7 @@
 
         <span flex></span>
 
-        <md-input-container layout="row">
+        <md-input-container ng-if="isAuthenticated()" layout="row">
             <div data-ng-repeat="state in getAvailableStates()" layout-align="center center">
                 <md-button hide-xs aria-label="State {{state}} Name"
                            data-ui-sref="{{state.name}}">
@@ -24,6 +24,18 @@
                     </md-icon>
                 </md-button>
             </div>
+            <md-button ng-click="logout()">
+                Logout
+            </md-button>
+        </md-input-container>
+
+        <md-input-container ng-if="!isAuthenticated()" layout="row">
+            <md-button ui-sref="app.login">
+                Login
+            </md-button>
+            <md-button ui-sref="app.signup">
+                Sign Up
+            </md-button>
         </md-input-container>
     </div>
 </md-toolbar>

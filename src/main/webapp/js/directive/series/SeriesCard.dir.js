@@ -85,8 +85,9 @@
                     if (UserService.isOnProfile(series)) {
                         return ModalService.error(`${series.Title} is on your profile already!`);
                     } else {
-                        UserService.addToProfile(series);
-                        return ToastService.showActionToast(`${series.Title} added to profile!`);
+                        return SeriesService.addToProfile(series)
+                            .catch(err => ModalService.notifyError(`Failed adding series to profile. ${(err.data.message || '')}`,err))
+                            .then(info => ToastService.showActionToast(`${series.Title} added to profile!`));
                     }
                 };
 

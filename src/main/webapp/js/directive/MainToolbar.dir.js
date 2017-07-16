@@ -6,7 +6,7 @@
      *
      * @author Estácio Pereira
      */
-    angular.module('toolbarModule', []).directive('mainToolbar', ['$state', 'APP_STATES', function ($state, APP_STATES) {
+    angular.module('toolbarModule', []).directive('mainToolbar', ['$state', 'AuthService', 'APP_STATES', function ($state, AuthService, APP_STATES) {
         return {
             restrict: 'AE',
             templateUrl: './view/directive/mainToolbar.html',
@@ -24,6 +24,9 @@
                     'app.watchlist': [APP_STATES.HOME, APP_STATES.PROFILE],
                     'app.signup': [APP_STATES.HOME]
                 };
+
+                $scope.isAuthenticated = () => AuthService.isAuthenticated();
+                $scope.logout = () => AuthService.logout();
 
                 /**
                  * Returns the state name to display.

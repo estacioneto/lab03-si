@@ -72,15 +72,25 @@
                     templateUrl: view + 'app.html',
                     controller: 'AppController'
                 })
-                .state('app.home', {
+                .state('app.init', {
                     url: '/',
-                    templateUrl: view + 'home.html',
-                    controller: 'HomeController as homeCtrl'
+                    templateUrl: view + 'initial.html',
+                    controller: 'InitialController as initialCtrl'
                 })
                 .state('app.signup', {
                     url: '/signup',
                     templateUrl: view + 'sign-up.html',
                     controller: 'SignUpController as signUpCtrl'
+                })
+                .state('app.login', {
+                    url: '/login',
+                    templateUrl: view + 'login.html',
+                    controller: 'LoginController as loginCtrl'
+                })
+                .state('app.home', {
+                    url: '/home',
+                    templateUrl: view + 'home.html',
+                    controller: 'HomeController as homeCtrl'
                 })
                 .state('app.profile', {
                     url: '/profile',
