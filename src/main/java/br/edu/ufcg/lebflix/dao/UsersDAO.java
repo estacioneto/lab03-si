@@ -21,6 +21,11 @@ public class UsersDAO {
             .append("WHERE u.email=:email ")
             .toString();
 
+    private static final String QUERY_USER_EXISTS_BY_EMAIL_AND_PASSWORD = new StringBuilder()
+            .append(QUERY_USER_EXISTS_BY_EMAIL)
+            .append("AND u.password=:password ")
+            .toString();
+
     private static final String QUERY_USER_BY_EMAIL = new StringBuilder()
             .append("SELECT new User(u.id, u.email, u.name) ")
             .append("FROM User u ")
@@ -47,9 +52,10 @@ public class UsersDAO {
         entityManager.persist(user);
     }
 
-    public boolean existsUser(User user) {
-        TypedQuery<Long> getUserQuery = entityManager.createQuery(QUERY_USER_EXISTS_BY_EMAIL, Long.class);
-        getUserQuery.setParameter("email", user.getEmail());
+    public boolean existsUser(String email, String password) {
+        TypedQuery<Long> getUserQuery = entityManager.createQuery(QUERY_USER_EXISTS_BY_EMAIL_AND_PASSWORD, Long.class);
+        getUserQuery.setParameter("email", email);
+        getUserQuery.setParameter("password", password);
         return EXISTS.equals(getUserQuery.getSingleResult());
     }
 
@@ -57,5 +63,11 @@ public class UsersDAO {
         TypedQuery<User> getUserQuery = entityManager.createQuery(QUERY_USER_BY_EMAIL, User.class);
         getUserQuery.setParameter("email", email);
         return getUserQuery.getSingleResult();
+    }
+
+    public boolean existsUserWithEmail(String email) {
+        TypedQuery<Long> getUserQuery = entityManager.createQuery(QUERY_USER_EXISTS_BY_EMAIL, Long.class);
+        getUserQuery.setParameter("email", email);
+        return EXISTS.equals(getUserQuery.getSingleResult());
     }
 }

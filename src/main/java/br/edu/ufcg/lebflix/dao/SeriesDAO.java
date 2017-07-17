@@ -32,6 +32,13 @@ public class SeriesDAO {
             .append("AND s.onWatchlist IS TRUE ")
             .toString();
 
+    private static final String QUERY_SERIES_EXISTS = new StringBuilder()
+            .append("SELECT COUNT(1) ")
+            .append("FROM Series s ")
+            .append("WHERE s.idUser=:idUser ")
+            .append("AND s.imdbID=:imdbID ")
+            .toString();
+
     private static final Long EXISTS = 1L;
 
     @PersistenceContext
@@ -72,5 +79,12 @@ public class SeriesDAO {
         entityManager.flush();
         entityManager.refresh(series);
         return series;
+    }
+
+    public boolean existsSeries(Long idUser, String imdbID) {
+        TypedQuery<Long> getUserQuery = entityManager.createQuery(QUERY_SERIES_EXISTS, Long.class);
+        getUserQuery.setParameter("idUser", idUser);
+        getUserQuery.setParameter("imdbID", imdbID);
+        return EXISTS.equals(getUserQuery.getSingleResult());
     }
 }

@@ -6,10 +6,13 @@
      *
      * @author Estácio Pereira.
      */
-    angular.module('seriesModule', []).service('SeriesService', ['$http', 'UserService', 'API_URIS', function ($http, UserService, API_URIS) {
+    angular.module('seriesModule', []).service('SeriesService', ['$q', '$http', 'UserService', 'API_URIS', function ($q, $http, UserService, API_URIS) {
         const self = this;
         const seriesListUrl = 'https://omdbapi.com/?s=TITLE&apikey=93330d3c&type=series',
             singleSeriesUrl = 'https://omdbapi.com/?t=TITLE&apikey=93330d3c&type=series';
+
+        this.profileSeries = [];
+        this.watchlistSeries = [];
 
         /**
          * Loads the list of the series whose title matches with the given one.
@@ -34,32 +37,76 @@
         };
 
         this.loadProfileSeriesList = function () {
-            return $http.get(API_URIS.PROFILE_SERIES);
+            return $http.get(API_URIS.PROFILE_SERIES)
+                .then(info => {
+                    this.profileSeries = info.data;
+                    return info;
+                });
         };
 
         this.loadWatchlistSeriesList = function () {
-            return $http.get(API_URIS.WATCHLIST_SERIES);
+            return $http.get(API_URIS.WATCHLIST_SERIES)
+                .then(info => {
+                    this.watchlistSeries = info.data;
+                    return info;
+                });
         };
 
         this.addToProfile = function (series) {
-            series.onProfile = true;
-            series.onWatchlist = false;
-            return saveSeries(series);
+            const sentSeries = angular.copy(series);
+            sentSeries.onProfile = true;
+            sentSeries.onWatchlist = false;
+            return this.saveSeries(sentSeries)
+                .then(info => {
+                    if (series.onWatchlist) {
+                        removeFromWatchlistSeries(series);
+                    }
+                    Object.assign(series, info.data);
+                    return info;
+                });
         };
 
-        this.addToWatchlist = function (series) {
-            series.onProfile = false;
-            series.onWatchlist = true;
-            return saveSeries(series);
-        };
-
-        function saveSeries(series) {
-            const method = series.id ? $http.put : $http.post;
-            return method(API_URIS.SERIES, series);
+        function removeFromWatchlistSeries(targetSeries) {
+            _.remove(self.watchlistSeries, series => series.imdbID === targetSeries.imdbID);
         }
 
-        this.removeFromProfile = function (series) {
-            return $http.delete(API_URIS.SERIES + `/${series.id}`, series);
+        this.addToWatchlist = function (series) {
+            const sentSeries = angular.copy(series);
+            sentSeries.onProfile = false;
+            sentSeries.onWatchlist = true;
+            return this.saveSeries(sentSeries)
+                .then(info => {
+                    Object.assign(series, info.data);
+                    return info;
+                });
         };
+
+        function removeFromProfileSeries(targetSeries) {
+            _.remove(self.profileSeries, series => series.imdbID === targetSeries.imdbID);
+        }
+
+        this.saveSeries = function (series) {
+            const method = series.id ? $http.put : $http.post;
+            const uri = series.id ? (API_URIS.SERIES + `/${series.id}`) : API_URIS.SERIES;
+            return method(uri, series);
+        };
+
+        this.removeFromProfile = function (series) {
+            return $http.delete(API_URIS.SERIES + `/${series.id}`, series)
+                .then(info => {
+                    removeFromProfileSeries(series);
+                    clearSeriesInfo(series);
+                    return info;
+                });
+        };
+
+        function clearSeriesInfo(series) {
+            delete series.id;
+            delete series.onProfile;
+            delete series.onWatchlist;
+            delete series.season;
+            delete series.lastEpisode;
+            delete series.rate;
+        }
     }]);
 })();

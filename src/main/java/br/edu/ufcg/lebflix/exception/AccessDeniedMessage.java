@@ -5,8 +5,9 @@ package br.edu.ufcg.lebflix.exception;
  */
 public enum AccessDeniedMessage {
     INEXISTENT_USER("User does not exist."),
-    MISSING_AUTHORIZATION("Missing the authorization token"),
-    DOESNT_OWN_THE_SERIES("You cannot delete from other profile.");
+    MISSING_AUTHORIZATION("Missing the authorization token."),
+    DOESNT_OWN_THE_SERIES("This series is not on your profile or watchlist."),
+    WRONG_EMAIL_OR_PASSWORD("Wrong email or password.");
 
     private String message;
 

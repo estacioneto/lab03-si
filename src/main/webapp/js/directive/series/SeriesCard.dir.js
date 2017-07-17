@@ -15,8 +15,7 @@
             templateUrl: './view/directive/series/series-card.html',
             scope: {
                 series: '=',
-                showDetails: '=',
-                onRemove: '='
+                showDetails: '='
             },
             link: function ($scope, element, attrs) {
                 const {series} = $scope;
@@ -54,9 +53,8 @@
                         controller = 'SeriesDialogController as SeriesDialogCtrl',
                         targetEvent = $event,
                         resolve = {series: () => $scope.series};
-                    return $scope.loadDetails().then(info => {
-                        return ModalService.custom({templateUrl, controller, targetEvent, resolve});
-                    });
+                    return $scope.loadDetails()
+                        .then(info => ModalService.custom({templateUrl, controller, targetEvent, resolve}));
                 }
 
                 /**
@@ -128,8 +126,7 @@
                 function removeFromProfile() {
                     return SeriesService.removeFromProfile(series)
                         .catch(err => ModalService.notifyError(`Failed removing series from profile. ${(err.data.message || '')}`, err))
-                        .then(info => ToastService.notifySuccess(`${series.Title} removed from profile!`, info))
-                        .then($scope.onRemove);
+                        .then(info => ToastService.notifySuccess(`${series.Title} removed from profile!`, info));
                 }
             }
         };

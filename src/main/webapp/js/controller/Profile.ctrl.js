@@ -20,8 +20,7 @@
         (() => SeriesService.loadProfileSeriesList()
             .catch(err => ModalService.notifyError(`Loading profile series failed. ${(err.data.message || '')}`,err))
             .then(info => {
-                this.profile.series = info.data;
-                return info;
+                this.profile.series = SeriesService.profileSeries;
             })
         )();
     }]);

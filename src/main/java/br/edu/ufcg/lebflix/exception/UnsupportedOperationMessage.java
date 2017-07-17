@@ -5,7 +5,8 @@ package br.edu.ufcg.lebflix.exception;
  */
 public enum UnsupportedOperationMessage {
 
-    EXISITING_USER("A user with this email already exists.");
+    EXISITING_USER("A user with this email already exists."),
+    EXISTENT_SERIES("You already have this Series on profile or watchlist.");
 
     private String message;
 

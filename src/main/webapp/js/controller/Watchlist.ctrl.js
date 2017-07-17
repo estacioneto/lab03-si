@@ -1,7 +1,7 @@
 (() => {
     'use strict';
 
-    angular.module('userModule').controller('WatchlistController', ['UserService', function (UserService) {
+    angular.module('userModule').controller('WatchlistController', ['SeriesService', 'ModalService', function (SeriesService, ModalService) {
         const self = this;
 
         /**
@@ -10,6 +10,13 @@
          */
         this.showDetails = false;
 
-        this.watchlist = UserService.watchlist;
+        this.watchlist = {};
+
+        (() => SeriesService.loadWatchlistSeriesList()
+                .catch(err => ModalService.notifyError(`Loading profile series failed. ${(err.data.message || '')}`,err))
+                .then(info => {
+                    this.watchlist.series = SeriesService.watchlistSeries;
+                })
+        )();
     }]);
 })();

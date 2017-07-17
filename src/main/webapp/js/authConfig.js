@@ -7,8 +7,6 @@
                 return {
                     responseError: function (rejection) {
                         if (rejection.status === 401) {
-                            console.log('oq');
-                            store.remove('user');
                             store.remove('token');
                             $injector.get('$state').go('app.init');
                         }

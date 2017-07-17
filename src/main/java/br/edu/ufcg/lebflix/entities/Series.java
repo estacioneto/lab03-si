@@ -22,7 +22,7 @@ public class Series implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "IMDB_ID", updatable = false, unique = true)
+    @Column(name = "IMDB_ID", updatable = false)
     private String imdbID;
 
     @Column(name = "POSTER")
@@ -38,10 +38,10 @@ public class Series implements Serializable {
     private Double rate;
 
     @Column(name = "SEASON")
-    private String season;
+    private Long season;
 
     @Column(name = "EPISODE")
-    private String episode;
+    private String lastEpisode;
 
     @NotNull
     @Column(name = "ON_PROFILE")
@@ -56,7 +56,7 @@ public class Series implements Serializable {
     private Long idUser;
 
     public Series() {}
-    
+
     public Long getId() {
         return id;
     }
@@ -111,20 +111,20 @@ public class Series implements Serializable {
         this.rate = rate;
     }
 
-    public String getSeason() {
+    public Long getSeason() {
         return season;
     }
 
-    public void setSeason(String season) {
+    public void setSeason(Long season) {
         this.season = season;
     }
 
-    public String getEpisode() {
-        return episode;
+    public String getLastEpisode() {
+        return lastEpisode;
     }
 
-    public void setEpisode(String episode) {
-        this.episode = episode;
+    public void setLastEpisode(String lastEpisode) {
+        this.lastEpisode = lastEpisode;
     }
 
     public Boolean getOnProfile() {
