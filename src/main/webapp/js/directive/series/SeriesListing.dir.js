@@ -48,6 +48,18 @@
                     $scope.displayedSeries.series = getSeriesMatrix();
                 });
 
+                $scope.onRemove = function (removedSeries) {
+                    const seriesList = angular.copy($scope.seriesList.series);
+
+                    // Clear
+                    $scope.seriesList.series.splice(0, seriesList.length);
+
+                    // Add all
+                    $scope.seriesList.series.push.apply($scope.seriesList.series,
+                        _.filter(seriesList, series => series.imdbID !== removedSeries.imdbID));
+                    console.log($scope.seriesList.series);
+                };
+
                 angular.element($window).bind('resize', () => {
                     const seriesMatrix = getEmptyMatrix();
                     if (seriesMatrix.length !== $scope.displayedSeries.series.length) {

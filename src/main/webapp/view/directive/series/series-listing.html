@@ -4,6 +4,7 @@
             <div layout="column">
                 <div data-ng-repeat="singleSeries in seriesList" layout="column">
                     <div data-series-card
+                         data-on-remove="onRemove"
                          data-series="singleSeries"
                          data-show-details="showDetails"></div>
                 </div>

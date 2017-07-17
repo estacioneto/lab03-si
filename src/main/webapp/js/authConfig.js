@@ -7,9 +7,10 @@
                 return {
                     responseError: function (rejection) {
                         if (rejection.status === 401) {
+                            console.log('oq');
                             store.remove('user');
                             store.remove('token');
-                            $injector.get('$state').go('init');
+                            $injector.get('$state').go('app.init');
                         }
                         return $q.reject(rejection);
                     }
@@ -20,7 +21,7 @@
                 return {
                     request: function (config) {
                         const idToken = store.get('token');
-                        if (idToken) {
+                        if (idToken && _.includes(config.url, '/api/')) {
                             config.headers.Authorization = 'Bearer ' + idToken;
                         }
                         return config;

@@ -1,6 +1,7 @@
 package br.edu.ufcg.lebflix.entities;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,6 +24,15 @@ public class Series implements Serializable {
     @NotNull
     @Column(name = "IMDB_ID", updatable = false, unique = true)
     private String imdbID;
+
+    @Column(name = "POSTER")
+    private String Poster;
+
+    @Column(name = "TITLE")
+    private String Title;
+
+    @Column(name = "YEAR")
+    private String Year;
 
     @Column(name = "RATE")
     private Double rate;
@@ -61,6 +71,36 @@ public class Series implements Serializable {
 
     public void setImdbID(String imdbID) {
         this.imdbID = imdbID;
+    }
+
+    @JsonProperty(value = "Poster")
+    public String getPoster() {
+        return Poster;
+    }
+
+    @JsonProperty(value = "Poster")
+    public void setPoster(String poster) {
+        Poster = poster;
+    }
+
+    @JsonProperty(value = "Title")
+    public String getTitle() {
+        return Title;
+    }
+
+    @JsonProperty(value = "Title")
+    public void setTitle(String title) {
+        Title = title;
+    }
+
+    @JsonProperty(value = "Year")
+    public String getYear() {
+        return Year;
+    }
+
+    @JsonProperty(value = "Year")
+    public void setYear(String year) {
+        Year = year;
     }
 
     public Double getRate() {

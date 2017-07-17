@@ -15,7 +15,8 @@
             templateUrl: './view/directive/series/series-card.html',
             scope: {
                 series: '=',
-                showDetails: '='
+                showDetails: '=',
+                onRemove: '='
             },
             link: function ($scope, element, attrs) {
                 const {series} = $scope;
@@ -82,12 +83,12 @@
                  * @returns {Promise} Dialog or Toast's promise.
                  */
                 $scope.addToProfile = function () {
-                    if (UserService.isOnProfile(series)) {
+                    if (series.onProfile) {
                         return ModalService.error(`${series.Title} is on your profile already!`);
                     } else {
                         return SeriesService.addToProfile(series)
-                            .catch(err => ModalService.notifyError(`Failed adding series to profile. ${(err.data.message || '')}`,err))
-                            .then(info => ToastService.showActionToast(`${series.Title} added to profile!`));
+                            .catch(err => ModalService.notifyError(`Failed adding series to profile. ${(err.data.message || '')}`, err))
+                            .then(info => ToastService.notifySuccess(`${series.Title} added to profile!`, info));
                     }
                 };
 
@@ -97,32 +98,15 @@
                  * @returns {Promise} Dialog or Toast's promise.
                  */
                 $scope.addToWatchlist = function () {
-                    if (UserService.isOnWatchlist(series) || UserService.isOnProfile(series)) {
+                    if (series.onProfile || series.onWatchlist) {
                         return ModalService.error(`${series.Title} is on your 
-                        ${UserService.isOnProfile(series) ? 'profile' : 'watchlist'} 
+                        ${series.onProfile ? 'profile' : 'watchlist'} 
                         already! Cannot be added to your watchlist!`);
                     } else {
-                        UserService.addToWatchlist(series);
-                        return ToastService.showActionToast(`${series.Title} added to watchlist!`);
+                        return SeriesService.addToWatchlist(series)
+                            .catch(err => ModalService.notifyError(`Failed adding series to watchlist. ${(err.data.message || '')}`, err))
+                            .then(info => ToastService.notifySuccess(`${series.Title} added to watchlist!`, info));
                     }
-                };
-
-                /**
-                 * Verifies if th series is on the user's watchlist.
-                 *
-                 * @returns {boolean} {@code true} if the series is on the user's watchlist.
-                 */
-                $scope.isOnWatchlist = function () {
-                    return UserService.isOnWatchlist(series);
-                };
-
-                /**
-                 * Verifies if th series is on the user's profile.
-                 *
-                 * @returns {boolean} {@code true} if the series is on the user's profile.
-                 */
-                $scope.isOnProfile = function () {
-                    return UserService.isOnProfile(series);
                 };
 
                 /**
@@ -142,8 +126,10 @@
                  * @returns {Promise} Toast's promise.
                  */
                 function removeFromProfile() {
-                    UserService.removeFromProfile(series);
-                    return ToastService.showActionToast(`${series.Title} removed from profile!`);
+                    return SeriesService.removeFromProfile(series)
+                        .catch(err => ModalService.notifyError(`Failed removing series from profile. ${(err.data.message || '')}`, err))
+                        .then(info => ToastService.notifySuccess(`${series.Title} removed from profile!`, info))
+                        .then($scope.onRemove);
                 }
             }
         };

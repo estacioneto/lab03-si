@@ -44,7 +44,22 @@
         this.addToProfile = function (series) {
             series.onProfile = true;
             series.onWatchlist = false;
-            return $http.post(API_URIS.SERIES, series);
+            return saveSeries(series);
+        };
+
+        this.addToWatchlist = function (series) {
+            series.onProfile = false;
+            series.onWatchlist = true;
+            return saveSeries(series);
+        };
+
+        function saveSeries(series) {
+            const method = series.id ? $http.put : $http.post;
+            return method(API_URIS.SERIES, series);
+        }
+
+        this.removeFromProfile = function (series) {
+            return $http.delete(API_URIS.SERIES + `/${series.id}`, series);
         };
     }]);
 })();

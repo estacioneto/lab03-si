@@ -21,7 +21,7 @@
                         ng-click="addToWatchlist()">Add to watchlist
                 </md-button>
             </md-input-container>
-            <md-input-container ng-if="isOnProfile() && showDetails">
+            <md-input-container ng-if="series.onProfile && showDetails">
                 <md-button class="md-accent md-icon-button"
                            ng-click="removeFromProfile()">
                     <md-icon>delete</md-icon>

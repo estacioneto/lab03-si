@@ -6,10 +6,15 @@
      *
      * @author Estácio Pereira.
      */
-    angular.module('toastModule', []).service('ToastService', ['$mdToast', function ($mdToast) {
+    angular.module('toastModule', []).service('ToastService', ['$q', '$mdToast', function ($q, $mdToast) {
         const self = this,
             FOUR_SECONDS = 4000,
             THREE_SECONDS = 3000;
+
+        this.notifySuccess = function (message, info) {
+            this.showActionToast(message);
+            return $q.when(info);
+        };
 
         /**
          * Shows an action toast and return the toast promise.
