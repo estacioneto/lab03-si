@@ -1,7 +1,9 @@
 package br.edu.ufcg.lebflix.exception;
 
 /**
- * Created by estacio on 13/07/17.
+ * Enum to encapsulate the AccessDeniedException's messages.
+ *
+ * @author Estácio Pereira.
  */
 public enum AccessDeniedMessage {
     INEXISTENT_USER("User does not exist."),
@@ -11,6 +13,11 @@ public enum AccessDeniedMessage {
 
     private String message;
 
+    /**
+     * Constructor.
+     *
+     * @param message Exception's message.
+     */
     private AccessDeniedMessage(String message) {
         this.message = message;
     }

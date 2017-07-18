@@ -44,36 +44,77 @@ public class SeriesDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Queries the profile's series.
+     *
+     * @param idUser Logged user's id.
+     * @return Logged user's profile's series.
+     */
     public List<Series> getProfileSeries(Long idUser) {
         TypedQuery<Series> query = entityManager.createQuery(QUERY_PROFILE_SERIES, Series.class);
         query.setParameter("idUser", idUser);
         return query.getResultList();
     }
 
+    /**
+     * Queries the watchlist's series.
+     *
+     * @param idUser Logged user's id.
+     * @return Logged user's watchlist's series.
+     */
     public List<Series> getWatchlistSeries(Long idUser) {
         TypedQuery<Series> query = entityManager.createQuery(QUERY_WATCHLIST_SERIES, Series.class);
         query.setParameter("idUser", idUser);
         return query.getResultList();
     }
 
+    /**
+     * Persists a series to the application's database.
+     *
+     * @param series Series to be persisted.
+     */
     public void persistSeries(Series series) {
         entityManager.persist(series);
     }
 
+    /**
+     * Verifies if the user owns the series, meaning the series has the user's id.
+     *
+     * @param idUser   User's id
+     * @param idSeries Series' id
+     * @return {@code true} if the user owns the series.
+     */
     public boolean isSeriesOwner(Long idUser, Long idSeries) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("idUser", idUser);
         return entityManager.find(Series.class, idSeries, parameters) != null;
     }
 
+    /**
+     * Returns the full series.
+     *
+     * @param idSeries Series' id.
+     * @return The full series.
+     */
     public Series getSeries(Long idSeries) {
         return entityManager.find(Series.class, idSeries);
     }
 
+    /**
+     * Removes the series from the database.
+     *
+     * @param series Series to be removed.
+     */
     public void removeSeries(Series series) {
         entityManager.remove(series);
     }
 
+    /**
+     * Updates the series.
+     *
+     * @param series New series.
+     * @return The updated series.
+     */
     public Series updateSeries(Series series) {
         series = entityManager.merge(series);
         entityManager.flush();
@@ -81,6 +122,13 @@ public class SeriesDAO {
         return series;
     }
 
+    /**
+     * Verifies the series' existence.
+     *
+     * @param idUser User's id.
+     * @param imdbID The Series' IMDB id.
+     * @return {@code true} if the series exists.
+     */
     public boolean existsSeries(Long idUser, String imdbID) {
         TypedQuery<Long> getUserQuery = entityManager.createQuery(QUERY_SERIES_EXISTS, Long.class);
         getUserQuery.setParameter("idUser", idUser);

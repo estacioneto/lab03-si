@@ -8,7 +8,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 /**
- * Created by estacio on 13/07/17.
+ * Users database handler.
+ *
+ * @author Estácio Pereira
  */
 @Repository
 public class UsersDAO {
@@ -42,16 +44,34 @@ public class UsersDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Returns the user given the id.
+     *
+     * @param id User's id.
+     * @return The User with the given id.
+     */
     public User getUserById(Long id) {
         TypedQuery<User> getUserQuery = entityManager.createQuery(QUERY_USER_BY_ID, User.class);
         getUserQuery.setParameter("id", id);
         return getUserQuery.getSingleResult();
     }
 
+    /**
+     * Persists the user in the application's database.
+     *
+     * @param user User to be persisted.
+     */
     public void persistUser(User user) {
         entityManager.persist(user);
     }
 
+    /**
+     * Verifies the user's existence.
+     *
+     * @param email    User's email
+     * @param password User's password
+     * @return {@code true} if there is an user with the given email and password.
+     */
     public boolean existsUser(String email, String password) {
         TypedQuery<Long> getUserQuery = entityManager.createQuery(QUERY_USER_EXISTS_BY_EMAIL_AND_PASSWORD, Long.class);
         getUserQuery.setParameter("email", email);
@@ -59,12 +79,24 @@ public class UsersDAO {
         return EXISTS.equals(getUserQuery.getSingleResult());
     }
 
+    /**
+     * Returns the user with the given email.
+     *
+     * @param email User's email.
+     * @return The user with the given email.
+     */
     public User getUserByEmail(String email) {
         TypedQuery<User> getUserQuery = entityManager.createQuery(QUERY_USER_BY_EMAIL, User.class);
         getUserQuery.setParameter("email", email);
         return getUserQuery.getSingleResult();
     }
 
+    /**
+     * Verifies the existence of an user with the given email.
+     *
+     * @param email User's email.
+     * @return {@code true} if there is an user with the given email.
+     */
     public boolean existsUserWithEmail(String email) {
         TypedQuery<Long> getUserQuery = entityManager.createQuery(QUERY_USER_EXISTS_BY_EMAIL, Long.class);
         getUserQuery.setParameter("email", email);

@@ -11,7 +11,9 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 import java.io.IOException;
 
 /**
- * Created by estacio on 14/07/17.
+ * Resources manager class. It manages the application front-end files.
+ *
+ * @author Estácio Pereira.
  */
 @Configuration
 public class WebConfigurator extends WebMvcConfigurerAdapter {

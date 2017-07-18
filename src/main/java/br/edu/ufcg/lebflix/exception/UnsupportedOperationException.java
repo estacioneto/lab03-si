@@ -4,15 +4,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Created by estacio on 17/07/17.
+ * UnsupportedOperationException's adapter. With this exception, we can dictate the Status returned.
+ * Status: 400
+ *
+ * @author Estácio Pereira.
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class UnsupportedOperationException extends java.lang.UnsupportedOperationException {
-    public UnsupportedOperationException (String message) {
+
+    /**
+     * Main Constructor
+     *
+     * @param message Exception's message.
+     */
+    public UnsupportedOperationException(String message) {
         super(message);
     }
 
-    public UnsupportedOperationException (UnsupportedOperationMessage unsupportedOperationMessage) {
+    /**
+     * Custom constructor to accept the Enums.
+     *
+     * @param unsupportedOperationMessage An Enum with the message to be thrown.
+     */
+    public UnsupportedOperationException(UnsupportedOperationMessage unsupportedOperationMessage) {
         super(unsupportedOperationMessage.getMessage());
     }
 }

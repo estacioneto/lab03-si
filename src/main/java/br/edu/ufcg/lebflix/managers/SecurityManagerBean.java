@@ -35,8 +35,13 @@ public class SecurityManagerBean implements SecurityManager {
     private Algorithm algorithm;
 
     private static final String ID_CLAIM = "id";
-    private static final String EMAIL_CLAIM = "email";
 
+    /**
+     * Bean constructor. Initializes the main properties needed to do the Security Management.
+     *
+     * @throws UnsupportedEncodingException Thrown in some error on the RSA keys.
+     * @throws NoSuchAlgorithmException     Thrown when trying to get the algorithm.
+     */
     public SecurityManagerBean() throws UnsupportedEncodingException, NoSuchAlgorithmException {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         keyPairGenerator.initialize(RSA_KEY_SIZE);
@@ -47,6 +52,12 @@ public class SecurityManagerBean implements SecurityManager {
         this.algorithm = Algorithm.RSA256(publicKey, privateKey);
     }
 
+    /**
+     * Verifies and decodes the given JWT.
+     *
+     * @param token The JWT.
+     * @return The decoded JWT.
+     */
     private DecodedJWT getDecodedJWT(String token) {
         try {
             JWTVerifier verifier = JWT.require(this.algorithm)
@@ -78,6 +89,12 @@ public class SecurityManagerBean implements SecurityManager {
         return getUserFromToken(token);
     }
 
+    /**
+     * The logic behind the extraction of the token from the Authorization header.
+     *
+     * @param authorization Authorization Header.
+     * @return The token in the header.
+     */
     private String getTokenByHeaderAuthorization(String authorization) {
         if (authorization != null) {
             String token = Iterables.getLast(Arrays.asList(authorization.split(" ")));
